@@ -93,7 +93,7 @@ namespace Snake
                     this.Alive = false;
                     break;
                 case FOOD:
-                    this.Speed+=20;
+                    this.Speed+=2;
                     this.Length++;
                     break;
             }
