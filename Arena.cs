@@ -23,7 +23,7 @@ namespace Snake
         private void drawHorizontalLine(int startx, int starty)
         {
             Console.SetCursorPosition(startx, starty);
-            for(var i = 0; i < Console.WindowWidth; i++)
+            for(var i = 0; i < Console.WindowWidth - 1; i++)
             {
                 Console.Write("#");
             }
@@ -45,7 +45,7 @@ namespace Snake
             drawHorizontalLine(0,0);
             drawVerticalLine(0,0);
             drawHorizontalLine(0, Console.WindowHeight - 2);
-            drawVerticalLine(Console.WindowWidth, 0);
+            drawVerticalLine(Console.WindowWidth - 1, 0);
         }
 
         public void DrawArena()
@@ -76,7 +76,7 @@ namespace Snake
                     }
                     break;
                 case RIGHT:
-                    if(headX == Console.WindowWidth)
+                    if(headX == Console.WindowWidth - 1)
                     {
                         return WALL;
                     }
