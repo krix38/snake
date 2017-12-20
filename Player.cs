@@ -14,7 +14,41 @@ namespace Snake
         private int headX, headY, tailX, tailY;
         private Arena arena;
         public int Length { get; set; }
-        public Direction Direction { get; set; }
+        private Direction direction { get; set; }
+        private bool isMooving = false;
+        public Direction Direction { 
+            get
+            {
+                return this.direction;
+            } 
+            set
+            {
+                if(isMooving)
+                {
+                    return;
+                }
+                switch(value)
+                {
+                    case UP:
+                        if(this.direction != DOWN)
+                            this.direction = value;
+                        break;
+                    case DOWN:
+                        if(this.direction != UP)
+                            this.direction = value;
+                        break;
+                    case LEFT:
+                        if(this.direction != RIGHT)
+                            this.direction = value;
+                        break;
+                    case RIGHT:
+                        if(this.direction != LEFT)
+                            this.direction = value;
+                        break;
+                }
+                isMooving = true;
+            } 
+        }
         public bool Alive { get; set; }
         public int Speed { get; set; }
         private Queue<Direction> tailQueue = new Queue<Direction>();
@@ -69,7 +103,15 @@ namespace Snake
         {
             ConsoleWrapper.ConsoleWriteCharXY(BODY_CHAR, headX, headY);
             bodyCoords.Add(new Tuple<int, int>(headX, headY));
-            switch(Direction)
+            moveSnake();
+            checkWallCollision(headX, headY);
+            checkSelfCollision(headX, headY);
+            isMooving = false;
+        }
+
+        private void moveSnake()
+        {
+            switch(direction)
             {
                 case RIGHT:
                     moveRight();
@@ -84,7 +126,11 @@ namespace Snake
                     moveDown();
                     break;
             }
-            switch(arena.CheckCollision(headX, headY, Direction))
+        }
+
+        private void checkWallCollision(int headX, int headY)
+        {
+            switch(arena.CheckCollision(headX, headY, direction))
             {
                 case NONE:
                     moveTail();
@@ -97,10 +143,7 @@ namespace Snake
                     this.Length++;
                     break;
             }
-            checkSelfCollision(headX, headY);
-            
         }
-
         private void checkSelfCollision(int x, int y)
         {
             foreach(var coords in bodyCoords.ToArray())
@@ -146,38 +189,26 @@ namespace Snake
 
         private void moveRight()
         {
-            if(Direction != LEFT)
-            {
-                ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, ++headX, headY);
-                tailQueue.Enqueue(RIGHT);
-            }
+            ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, ++headX, headY);
+            tailQueue.Enqueue(RIGHT);
         }
 
         private void moveLeft()
         {
-            if(Direction != RIGHT)
-            {
-                ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, --headX, headY);
-                tailQueue.Enqueue(LEFT);
-            }
+            ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, --headX, headY);
+            tailQueue.Enqueue(LEFT);
         }
 
         private void moveUp()
         {
-            if(Direction != DOWN)
-            {
-                ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, headX, --headY);
-                tailQueue.Enqueue(UP);
-            }
+            ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, headX, --headY);
+            tailQueue.Enqueue(UP);
         }
 
         private void moveDown()
         {
-            if(Direction != UP)
-            {
-                ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, headX, ++headY);
-                tailQueue.Enqueue(DOWN);
-            }
+            ConsoleWrapper.ConsoleWriteCharXY(HEAD_CHAR, headX, ++headY);
+            tailQueue.Enqueue(DOWN);
         }
 
     }

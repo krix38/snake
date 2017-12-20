@@ -47,9 +47,9 @@ namespace Snake
                 spawnFoodCounter++;
                 var sleepTime = SLEEP - player.Speed;
                 if(player.Direction == LEFT || player.Direction == RIGHT){
-                    sleepTime /= 2;
+                    sleepTime /= 3;
                 }
-                Thread.Sleep( sleepTime > 0 ? sleepTime : 10 );
+                Thread.Sleep( sleepTime > 40 ? sleepTime : 40 );
                 player.Move();
             }
             Console.SetCursorPosition(0, Console.WindowHeight);
